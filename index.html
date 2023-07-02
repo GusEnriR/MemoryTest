@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Memory Test</title>
+  <link href="styles.css" rel="stylesheet" type="text/css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #imageContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 400px;
+      height: 300px;
+      margin: 20px;
+      border: 1px solid #ccc;
+    }
+
+    #imageContainer img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    #resultContainer {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 20px;
+    }
+
+    #instructionsContainer {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #startButton {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+
+  <script>
+    var photos = [
+      "photos/ice6.jpg",
+      "photos/ice1.jpg",
+      "photos/ice3.jpg",
+      "photos/ice4.jpg",
+      "photos/ice5.jpg",
+      "photos/rice1.jpg",
+      "photos/rice2.jpg",
+      "photos/rice3.jpg",
+      "photos/rice4.jpg",
+      "photos/rice5.jpg",
+      "photos/luggage1.jpg",
+      "photos/luggage2.jpg",
+      "photos/luggage3.jpg",
+      "photos/luggage4.jpg",
+      "photos/luggage5.jpg",
+      "photos/ruins1.jpg",
+      "photos/ruins2.jpg",
+      "photos/ruins3.jpg",
+      "photos/ruins4.jpg",
+      "photos/ruins5.jpg",
+      "photos/ss1.jpg",
+      "photos/ss2.jpg",
+      "photos/ss3.jpg",
+      "photos/ss4.jpg",
+      "photos/ss5.jpg",
+      "photos/sunset1.jpg",
+      "photos/sunset2.jpg",
+      "photos/sunset3.jpg",
+      "photos/sunset4.jpg",
+      "photos/sunset5.jpg"
+    ];
+
+    var currentIndex = 0;
+    var totalPhotos = photos.length;
+    var correctClicks = 0;
+    var uniquePhotos = [];
+    var timer;
+
+    function showInstructions() {
+      var instructionsContainer = document.getElementById("instructionsContainer");
+      instructionsContainer.style.display = "block";
+    }
+
+    function startTest() {
+      var instructionsContainer = document.getElementById("instructionsContainer");
+      instructionsContainer.style.display = "none";
+      showNextPhoto();
+    }
+
+    function showNextPhoto() {
+      if (currentIndex >= totalPhotos) {
+        // End of the test
+        clearInterval(timer);
+        showResult();
+        return;
+      }
+
+      var imageContainer = document.getElementById("imageContainer");
+      var randomIndex = Math.floor(Math.random() * totalPhotos); // Select a random index
+      var photo = photos[randomIndex];
+
+      imageContainer.innerHTML = "<img src='" + photo + "' alt='Photo'>";
+
+      // Checks if the user has seen the photo before
+      imageContainer.onclick = function() {
+        if (!uniquePhotos.includes(photo)) {
+          correctClicks++;
+          uniquePhotos.push(photo);
+        } else {
+          correctClicks--;
+        }
+        currentIndex++;
+        showNextPhoto();
+      };
+
+      imageContainer.style.display = "block";
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(function() {
+        currentIndex++;
+        showNextPhoto();
+      }, 3000); // 3 seconds
+    }
+
+    function showResult() {
+      var resultContainer = document.getElementById("resultContainer");
+      resultContainer.innerHTML = "Accuracy: " + ((correctClicks / totalPhotos) * 100).toFixed(2) + "%";
+      resultContainer.style.display = "block";
+    }
+  </script>
+</head>
+<body>
+  <h1>Memory Test</h1>
+  <div id="instructionsContainer" class="instructions-container">
+    <h3>Instructions:</h3>
+    <ul>
+      <li>Welcome to the Cognitive/Memory Test</li>
+      <li>Here you will test your cognitive accuracy.</li>
+      <li>Click on the photos that you have seen before.</li>
+      <li>If you click on a photo that hasn't been shown before, your accuracy will decrease.</li>
+      <li>The test will automatically cycle through the photos every 3 seconds.</li>
+    </ul>
+    <button id="startButton" onclick="startTest()">Start Test</button>
+  </div>
+  <div id="imageContainer" class="image-container"></div>
+  <div id="resultContainer"></div>
+</body>
+</html>
