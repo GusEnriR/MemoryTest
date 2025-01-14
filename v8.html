@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=decive-width, initial-scale=1.0">
+  <meta http-equiv="X-US-Compatible" content="ie=edge">
+  <title>Memory Test</title>
+  <link href="main.css" rel="stylesheet" type="text/css">
+
+  <style>
+
+  </style>
+
+  <script>
+  var ww = [
+    "photo/ww1.jpg",
+    "photo/ww2.jpg",
+    "photo/ww3.jpg",
+    "photo/ww4.jpg",
+    "photo/ww5.jpg",
+    "photo/ww6.jpg",
+    "photo/ww7.jpg"
+  ]
+
+  var faucet = [
+    "photo/faucet1.jpg",
+    "photo/faucet2.jpg",
+    "photo/faucet3.jpg",
+    "photo/faucet4.jpg",
+    "photo/faucet5.jpg",
+    "photo/faucet6.jpg"
+  ]
+
+  var animal = [
+    "photo/animal1.jpg",
+    "photo/animal2.jpg",
+    "photo/animal3.jpg",
+    "photo/animal4.jpg",
+    "photo/animal5.jpg",
+    "photo/animal6.jpg"
+  ]
+
+  var picnic = [
+    "photo/picnic1.jpg",
+    "photo/picnic2.jpg",
+    "photo/picnic3.jpg",
+    "photo/picnic4.jpg",
+    "photo/picnic5.jpg"
+  ]
+
+  var bench = [
+    "photo/bench1.jpg",
+    "photo/bench2.jpg",
+    "photo/bench3.jpg",
+    "photo/bench4.jpg",
+    "photo/bench5.jpg",
+    "photo/bench6.jpg",
+    "photo/bench7.jpg",
+    "photo/bench8.jpg"
+  ]
+
+  var frame = [
+    "photo/frame1.jpg",
+    "photo/frame2.jpg",
+    "photo/frame3.jpg",
+    "photo/frame5.jpg",
+    "photo/frame6.jpg"
+  ]
+
+  var fruit = [
+    "photo/fruit1.jpg",
+    "photo/fruit2.jpg",
+    "photo/fruit3.jpg",
+    "photo/fruit4.jpg",
+    "photo/fruit5.jpg"
+  ]
+
+  var shoe = [
+    "photo/shoe1.jpg",
+    "photo/shoe2.jpg",
+    "photo/shoe4.jpg",
+    "photo/shoe5.jpg",
+    "photo/shoe6.jpg"
+  ]
+
+  var seashell = [
+    "photo/sss1.jpg",
+    "photo/sss2.jpg",
+    "photo/sss3.jpg",
+    "photo/sss4.jpg",
+    "photo/sss5.jpg"
+  ]
+
+  var toy = [
+    "photo/toy1.jpg",
+    "photo/toy2.jpg",
+    "photo/toy3.jpg",
+    "photo/toy4.jpg",
+    "photo/toy5.jpg",
+    "photo/toy6.jpg"
+  ]
+
+  var categoryArrays = [animal, faucet, bench, ww, toy, seashell, shoe, fruit, frame, picnic];
+  var photos = mergeSelectedCategories(categoryArrays);
+  var currentIndex = 0;
+  var totalPhotos = photos.length;
+  var correctClicks = 0;
+  var uniquePhotos = [];
+  var timer;
+  var previousPhotos = [];
+  var totalClicks = 0;
+  var timerSeconds = 120;
+  var timerInterval;
+  var randomizedPhotos = [];
+
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  }
+
+  function selectCategories() {
+    shuffleArray(categoryArrays); // Shuffle the category arrays
+    return categoryArrays.slice(0, 5); // Select the first 5 shuffled categories
+  }
+
+  function mergeSelectedCategories(selectedCategories) {
+    var mergedArray = [];
+    selectedCategories.forEach(function (category) {
+      category.forEach(function (photo) {
+        mergedArray.push(photo);
+        mergedArray.push(photo); // Duplicate the photo once
+      });
+    });
+    return mergedArray;
+  }
+
+  function showInstructions() {
+    var instructionsContainer = document.getElementById("instructionsContainer");
+    instructionsContainer.style.display = "block";
+  }
+
+  function startTest() {
+    var selectedCatergories = selectCategories();
+    var photos = mergeSelectedCategories(selectedCatergories);
+
+    randomizedPhotos = photos.slice();
+    shuffleArray(randomizedPhotos);
+
+    var instructionsContainer = document.getElementById("instructionsContainer");
+    instructionsContainer.style.display = "none";
+
+    var intervalContainer = document.getElementById("intervalContainer");
+    intervalContainer.style.display = "none";
+
+    var testContainer = document.getElementById("testContainer");
+    testContainer.style.display = "block"; // Show the parent container and its content
+
+    var resultContainer = document.getElementById("resultContainer");
+    resultContainer.style.display = "none"; // Show the parent container and its content
+
+    var title = document.getElementById("title");
+    title.style.display = "none"; // Hide the h1 element
+
+    randomizedPhotos = photos.slice();
+    shuffleArray(randomizedPhotos);
+
+    timerSeconds = 120;
+    updateTimer(); // Update the timer initially
+
+    timerInterval = setInterval(function () {
+      timerSeconds--;
+      updateTimer();
+
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval); // Clear the interval when the timer reaches 0
+        showResult();
+      }
+    }, 1000);
+
+    // Reset variables
+    totalClicks = 0;
+    updateProgressBar(); // Reset the progress bar
+    var progressBarContainer = document.getElementById("progressBarContainer");
+    progressBarContainer.style.display = "block"; // Show the progress bar container
+
+    // Set a time limit of 2 minutes (120 seconds)
+    setTimeout(function () {
+      clearInterval(timer);
+      showResult();
+    }, 120000); // 120,000 milliseconds = 2 minutes
+
+    showNextPhoto();
+  }
+
+
+  function showNextPhoto() {
+
+    if (currentIndex >= totalPhotos || totalClicks >= 50) {
+      // End of the test (either all photos shown or 50 clicks reached)
+      clearInterval(timer);
+      showResult();
+      return;
+    }
+
+    var imageContainer = document.getElementById("imageContainer");
+
+    // Get the next photo to show
+    var currentPhoto = randomizedPhotos[currentIndex];
+    var seenBefore = uniquePhotos.includes(currentPhoto);
+    var hasClicked = false;
+
+    // If the current photo was shown recently, skip showing it again
+    var recentlyShown = previousPhotos.includes(currentPhoto);
+    if (recentlyShown) {
+      currentIndex++;
+      showNextPhoto();
+      return;
+    }
+
+    imageContainer.innerHTML = "<img src='" + currentPhoto + "' alt='Photo'>";
+
+    updateTimer();
+
+    imageContainer.onclick = function() {
+      if (!hasClicked && !seenBefore) {
+        correctClicks++;
+        hasClicked = true;
+        totalClicks++; // Increment the click count
+        updateProgressBar(); // Update the progress bar after each click
+        updateClickCount(); // Update the number of photos clicked
+      }
+      currentIndex++;
+      showNextPhoto();
+    };
+
+    imageContainer.style.display = "block";
+    startTimer();
+
+    // Add the current photo to the previousPhotos array
+    previousPhotos.push(currentPhoto);
+
+    // Keep only the last few photos in the array
+    var maxPreviousPhotos = 5; // Adjust this value to control the number of previous photos
+    if (previousPhotos.length > maxPreviousPhotos) {
+      previousPhotos.shift();
+    }
+  }
+
+  function updateProgressBar() {
+    var progressBar = document.getElementById("progressBar");
+    progressBar.value = totalClicks;
+  }
+
+  function showResult() {
+    var resultContainer = document.getElementById("resultContainer");
+    resultContainer.innerHTML = "Accuracy: " + ((correctClicks / totalPhotos) * 100).toFixed(2) + "%";
+    resultContainer.style.display = "block";
+
+    clearInterval(timerInterval); // Clear the timer interval
+
+    // Retake button
+    var retakeContainer = document.getElementById("retakeContainer");
+    retakeContainer.style.display = "block";
+
+    var resultPage = document.getElementById("resultPage");
+    resultPage.style.display = "block";
+
+    var imageContainer = document.getElementById("imageContainer");
+    imageContainer.style.display = "none";
+
+    var testContainer = document.getElementById("testContainer");
+    testContainer.style.display = "none";
+
+    var progressBarContainer = document.getElementById("progressBarContainer");
+    progressBarContainer.style.display = "none";
+  }
+
+
+  // Add this function to update the time interval value based on the user's selection
+  function updateTimeInterval() {
+    var intervalSlider = document.getElementById("intervalSlider");
+    var intervalValue = document.getElementById("intervalValue");
+    var selectedInterval = intervalSlider.value;
+    intervalValue.textContent = selectedInterval + " seconds";
+  }
+
+  // Call the function to update the interval value when the user interacts with the slider
+  document.getElementById("intervalSlider").addEventListener("input", updateTimeInterval);
+
+  // Modify the startTimer function to use the selected time interval
+  function startTimer() {
+    clearInterval(timer);
+    var intervalSlider = document.getElementById("intervalSlider");
+    var selectedInterval = intervalSlider.value * 1000; // Convert to milliseconds
+    timer = setInterval(function () {
+      currentIndex++;
+      totalClicks++; // Increment the click count for automatic photo changes
+      updateProgressBar(); // Update the progress bar after each click or automatic photo change
+      showNextPhoto();
+    }, selectedInterval);
+  }
+
+  function updateClickCount() {
+    var clickCountElement = document.getElementById("clickCount");
+    clickCountElement.textContent = "Photos: " + totalClicks + " / 50";
+  }
+
+  function retakeTest() {
+    currentIndex = 0;
+    correctClicks = 0;
+    totalClicks = 0;
+    uniquePhotos = [];
+    previousPhotos = [];
+
+    var resultPage = document.getElementById("resultPage");
+    resultPage.style.display = "none";
+
+    // Hide the result and retake button
+    var resultContainer = document.getElementById("resultContainer");
+    resultContainer.style.display = "none";
+
+    var retakeContainer = document.getElementById("retakeContainer");
+    retakeContainer.style.display = "none";
+
+    // Show the instructions and interval container again
+    var instructionsContainer = document.getElementById("instructionsContainer");
+    instructionsContainer.style.display = "block";
+
+    var intervalContainer = document.getElementById("intervalContainer");
+    intervalContainer.style.display = "block";
+
+    // Hide the image container initially
+    var imageContainer = document.getElementById("imageContainer");
+    imageContainer.style.display = "none";
+
+    // Call the startTest function again to start a new test
+    startTest();
+  }
+
+  function updateTimer() {
+    var timerElement = document.getElementById("timer");
+    var minutes = Math.floor(timerSeconds / 60);
+    var seconds = timerSeconds % 60;
+    timerElement.textContent =  /* "Time Left: " + */ formatTime(minutes) + ":" + formatTime(seconds);
+  }
+
+  // Helper function to format time values with leading zeros
+  function formatTime(time) {
+    return time < 10 ? "0" + time : time;
+  }
+  </script>
+</head>
+<body>
+  <h1 id="title">
+    <img src="photo/Donalee_logo.png" alt="Logo" id="logo">
+    Welcome to the TMT!
+    <img src="photo/Tree_brain.png" alt="Logo" id="logo">
+  </h1>
+  <div id="testContainer" style="display: none;">
+    <div id="progressBarContainer" class="progress-bar-container">
+      <progress id="progressBar" value="0" max="50"></progress>
+      <p id="clickCount">Photos: 0 / 50</p>
+      <p id="timer">2:00</p>
+    </div>
+    <div id="imageContainer" class = "fixed-size"></div>
+    <!-- <div id="resultContainer"></div> -->
+  </div>
+  <div id="instructionsContainer" class="instructions-container">
+    <h3>Instructions:</h3>
+    <ul style="list-style-type: none;">
+      <li>Welcome to the Cognitive/Memory Test</li>
+      <li>Here you will test your cognitive accuracy.</li>
+      <li>Click on the photos that you have seen before.</li>
+      <li>If you click on a photo that hasn't been shown before, your accuracy will decrease.</li>
+      <li>The test will automatically cycle through the photos every 3-6 seconds.</li>
+      <li>You can adjust the time interval betweene photo, if need be! Good luck!</li>
+    </ul>
+    <div id="intervalContainer" class="interval-container">
+      <label for="intervalSlider">Adjust Time Interval (3 to 6 seconds):</label>
+      <input type="range" id="intervalSlider" min="3" max="6" step="1" value="3" oninput="rangeValue.innerText = this.value"><p id="rangeValue">3 seconds</p>
+      <!--<span id="intervalValue">3 seconds</span>-->
+    </div>
+    <button id="startButton" onclick="startTest()" class = "button" style="vertical-align:middle"><span>Start Test</span></button>
+  </div>
+  <!-- <div id="imageContainer" class="image-container"></div> -->
+  <div id="resultPage" class ="result-title" style="display: none;">
+    <h1>
+      <img src="photo/Donalee_logo.png" alt="Logo" id="logo">
+      Your results!
+      <img src="photo/Tree_brain.png" alt="Logo" id="logo">
+    </h1>
+    <div id="resultContainer"></div>
+    <ul style="list-style-type: none;">
+      <li> Good Job!</li>
+      <li> Try again to imporve your score!</li>
+      <li> If you the photos moved to fast, dont worry!</li>
+      <li> Adjust the time interval between photos </li>
+      <li> Has a range from 3 to 6 seconds</li>
+    </ul>
+    <div id="retakeContainer" class="retake-container">
+      <button id="retakeButton" onclick="retakeTest()">Retake Test</button>
+    </div>
+
+  </div>
+</body>
+</html>

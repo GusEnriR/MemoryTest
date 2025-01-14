@@ -1,0 +1,208 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f4e9d7;
+}
+
+h1 {
+  text-align: center;
+}
+
+#title {
+  font-size: 35px;
+  width: 750px;
+  max-width: 750px;
+}
+
+#imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 750px;
+  max-width: 750px;
+  height: 500px;
+  max-height: 500px;
+  margin: 20px;
+  border: 5px solid #f4e9d7;
+  overflow: hidden;
+  display: none;
+}
+
+#imageContainer img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+#resultContainer {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 20px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#instructionsContainer {
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: #DDC392;
+  border: 5px solid grey;
+  margin: 0;
+  font-size: 25px;
+  border-radius: 25px;
+  width: 900px;
+  height: 500px;
+}
+
+#startButton {
+  font-size: 20px;
+  padding: 15px 40px; /* Increase the padding to make the button bigger */
+}
+
+#intervalContainer {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#intervalSlider {
+  width: 500px;
+  margin: 10px;
+}
+
+#intervalValue {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#progressBarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  text-align: center;
+  margin: 20px;
+  margin-bottom: 20px;
+  width: 750px;
+  display: none; /* Initially hidden */
+}
+
+#progressBar {
+  width: 750px;
+  height: 40px;
+}
+
+#clickCount {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#timer {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#logo {
+  width: 50px;
+  height: auto; /* ensures the aspect ratio is maintained */
+  margin-right: 10px; /* Add some space between the logo and the title */
+}
+
+#retakeContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#testContainer {
+  display: none; /* Initially hidden */
+  flex-direction: column; /* Arrange its children in a column */
+  align-items: center; /* Center its children horizontally */
+  justify-content: center; /* Center its children vertically */
+  height: 90%; /* Occupy the full height of the viewport */
+  background-color: #DDC392; /* Set a background color for the test container */
+  border: 5px solid #000000; /* Created boardr around test container */
+  padding: 20px; /* Add padding around the container */
+  border-radius: 25px;
+}
+
+#resultPage {
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: #DDC392;
+  border: 5px solid grey;
+  margin: 0;
+  margin-top: 50px; /* Add margin to create space between the result container and other content */
+  padding: 20px; /* Add padding around the container */
+  border-radius: 25px;
+  display: none;
+  font-size: 20px;
+  width: 750px;
+  height: 500px;
+}
+
+#resultTitle{
+  font-size: 50px;
+  font-weight: bold;
+}
+
+#retakeButton {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 15px 40px; /* Increase the padding to make the button bigger */
+  margin-top: 20px;
+}
+
+.range input {
+  margin-top:10%;
+}
+
+
+.fixed-size {
+  width: 100%; /* Set a fixed width for the image container */
+  height: 100%; /* Set a fixed height for the image container */
+}
+
+.button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f4e9d7;
+  border: none;
+  color: #000000;
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
